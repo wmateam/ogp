@@ -121,105 +121,13 @@ class OpenGraphProtocol extends DOMDocument
     public function get()
     {
         $this->response = $this->request->get();
-        return $this->explorer();
+        return new SitePreview($this->response->getBody(), $this->url);
     }
 
     public function post($data = [])//TODO add post type
     {
         $this->request->post($data);
-        return $this->explorer();
-    }
-
-    private function explorer()
-    {
-        $html = $this->response->getBody();
-
-        $internalErrors = libxml_use_internal_errors(true);
-
-        $dom = new DOMDocument('1.0', 'UTF-8');
-        $dom->loadHTML($html);
-
-        libxml_use_internal_errors($internalErrors);
-        //$dom->loadHTMLFile('index.html');
-        $tags = $dom->getElementsByTagName('meta');
-
-
-        foreach ($tags as $item) {
-            if ($item->hasAttribute('property')) {
-                $property = $item->getAttribute('property');
-                if (in_array($property, $this->validAttributes)) {
-                    if (in_array($property, $this->mediaType)) {
-                        $property = explode(':', $property);
-                        $this->data[$property[1]][] = $item->getAttribute('content');
-                    } else {
-                        $this->data[$item->getAttribute('property')] = $item->getAttribute('content');
-                    }
-                } else if ($item->hasAttribute('name') && $item->getAttribute('name') == 'description') {
-                    $this->data['description'] = $item->getAttribute('content');
-                }
-            }
-        }
-        // If op not exists
-        if (!array_key_exists('op:title', $this->data)) {
-            $data['title'] = $dom->getElementsByTagName('title')->item(0)->textContent;
-        }
-        return $this->aggrigate();
-    }
-
-    protected function aggrigate()
-    {
-        $result = [];
-        if (array_key_exists('og:url', $this->data)) {
-            $result['url'] = $this->data['og:url'];
-        } else {
-            $result['url'] = $this->url;
-        }
-        if (array_key_exists('og:title', $this->data)) {
-            $result['title'] = $this->data['og:title'];
-        } else if (array_key_exists('og:name', $this->data)) {
-            $result['title'] = $this->data['og:name'];
-        } else if (array_key_exists('title', $this->data)) {
-            $result['title'] = $this->data['title'];
-        }
-
-        if (array_key_exists('og:site_name', $this->data)) {
-            $result['title'] .= ' - ' . $this->data['og:site_name'];
-        }
-
-
-        if (array_key_exists('og:description', $this->data)) {
-            $result['description'] = $this->data['og:description'];
-        } else if (array_key_exists('description', $this->data)) {
-            $result['title'] = $this->data['description'];
-        }
-
-
-        if (array_key_exists('image', $this->data)) {
-            $result['images'] = $this->data['image'];
-        }
-
-        if (array_key_exists('video', $this->data)) {
-            $result['videos'] = $this->data['video'];
-        }
-
-        if (array_key_exists('audio', $this->data)) {
-            $result['audios'] = $this->data['audio'];
-        }
-
-
-        if (array_key_exists('og:type', $this->data)) {
-            $this->data['og:type'] = explode('.', $this->data['og:type']);
-            $result['type'] = $this->data['og:type'][0];
-            $result['kind'] = '';
-            if (isset($this->data['og:type'][1])) {
-                $result['kind'] = $this->data['og:type'][1];
-            }
-
-            if ($result['type'] == 'music') {
-
-            }
-        }
-        return $result;
+        //return $this->explorer();
     }
 }
 
