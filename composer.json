@@ -14,7 +14,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": ">=5.*",
+    "php": ">=5.3",
     "wmateam/curling": "@stable"
   },
   "require-dev": {
