@@ -10,8 +10,8 @@ namespace wmateam\ogp;
 
 use DOMDocument;
 use Symfony\Component\Yaml\Exception\RuntimeException;
-use wmateam\curling\HttpRequest;
-use wmateam\curling\HttpResponse;
+use wmateam\curling\CurlRequest;
+use wmateam\curling\CurlResponse;
 
 class OpenGraphProtocol extends DOMDocument
 {
@@ -21,11 +21,11 @@ class OpenGraphProtocol extends DOMDocument
      */
     private $url = null;
     /**
-     * @var HttpRequest
+     * @var CurlRequest
      */
     private $request = null;
     /**
-     * @var HttpResponse
+     * @var CurlResponse
      */
     private $response = null;
     /**
@@ -105,7 +105,7 @@ class OpenGraphProtocol extends DOMDocument
     public function __construct($url)
     {
         $this->url = $url;
-        $this->request = new HttpRequest($this->url);
+        $this->request = new CurlRequest($this->url);
     }
 
     /**
