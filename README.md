@@ -5,3 +5,5 @@
 
 # OGP (Open Graph Protocol)
 ogp request Handler for PHP
+## Dependencies :
+- wmateam/curling
