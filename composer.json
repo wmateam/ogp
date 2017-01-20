@@ -5,14 +5,14 @@
   "homepage": "https://github.com/wmateam/ogp",
   "type": "library",
   "version": "0.4.0",
-  "license": "MIT",
+  "minimum-stability": "stable",
   "authors": [
     {
       "name": "Mohammad Javad Afkari",
       "email": "wmateam@gmail.com"
     }
   ],
-  "minimum-stability": "stable",
+  "license": "MIT",
   "require": {
     "php": ">=5.3",
     "wmateam/curling": "0.7.*"
